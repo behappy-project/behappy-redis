@@ -1,0 +1,5 @@
+spring:
+  redis:
+    password: J*#36@us.tin
+    host: 139.199.65.191
+    port: 6666

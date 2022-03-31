@@ -14,7 +14,7 @@ public @interface Lock {
     /**
      * 锁的key
      */
-    String key();
+    String key() default "";
     /**
      * 获取锁的最大尝试时间(单位 {@code unit})
      * 该值大于0则使用 locker.tryLock 方法加锁，否则使用 locker.lock 方法

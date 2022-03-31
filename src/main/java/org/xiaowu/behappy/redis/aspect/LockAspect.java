@@ -44,19 +44,23 @@ public class LockAspect {
      */
     @Around("@within(lock) || @annotation(lock)")
     public Object aroundLock(ProceedingJoinPoint point, Lock lock) throws Throwable {
+        MethodSignature methodSignature = (MethodSignature)point.getSignature();
         if (lock == null) {
             // 获取类上的注解
             lock = point.getTarget().getClass().getDeclaredAnnotation(Lock.class);
         }
         String lockKey = lock.key();
+        // 默认方法名为key
         if (!StringUtils.hasLength(lockKey)) {
-            throw new BeHappyException(LOCKKEY_IS_NULL.getCode(), LOCKKEY_IS_NULL.getMsg());
-        }
-        if (lockKey.contains("#")) {
-            MethodSignature methodSignature = (MethodSignature)point.getSignature();
+            lockKey = methodSignature.getMethod().getName();
+        }else if (lockKey.contains("#")) {
             //获取方法参数值
             Object[] args = point.getArgs();
             lockKey = CommonUtils.getValBySpEL(lockKey, methodSignature, args);
+        }
+        // 当配置了el表达式但是所选字段为空时,会抛出异常,兜底使用方法名做标识
+        if(lockKey == null){
+            lockKey = methodSignature.getMethod().getName();
         }
         RLock rLock = null;
         try {
@@ -66,7 +70,6 @@ public class LockAspect {
             } else {
                 rLock = locker.lock(lockKey, lock.leaseTime(), lock.unit(), lock.isFair());
             }
-
             if (rLock != null) {
                 return point.proceed();
             } else {
