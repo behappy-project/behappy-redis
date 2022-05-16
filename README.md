@@ -4,6 +4,14 @@
 * 配置简单,使用方便
 
 ## 使用方式
+### pom
+```
+<dependency>
+    <groupId>io.github.wang-xiaowu</groupId>
+    <artifactId>behappy-redis</artifactId>
+    <version>0.0.2</version>
+</dependency>
+```
 ### 配置
 - redisson.yaml配置, 详细请[参见redisson配置方式](https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95)
 ```
