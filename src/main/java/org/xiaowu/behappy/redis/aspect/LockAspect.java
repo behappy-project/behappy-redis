@@ -35,8 +35,8 @@ public class LockAspect {
     private final RedissonLockService locker;
 
     /**
-     * @within(lock) 自定义注解标注在的类上；该类的所有方法（不包含子类方法）执行aop方法
-     * @annotation(lock) 自定义注解标注在方法上的方法执行aop方法
+     * "@within(lock) "自定义注解标注在的类上；该类的所有方法（不包含子类方法）执行aop方法
+     * "@annotation(lock)" 自定义注解标注在方法上的方法执行aop方法
      * @param point
      * @param lock
      * @return

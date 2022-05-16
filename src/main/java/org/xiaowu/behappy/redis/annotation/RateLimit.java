@@ -37,7 +37,6 @@ public @interface RateLimit {
     LimitTypeEnum limitType() default LimitTypeEnum.IP;
 
     /**
-     * @apiNote
      * RRateLimiter 速度类型
      * OVERALL,    所有客户端加总限流
      * PER_CLIENT; 每个客户端单独计算流量

@@ -1,7 +1,7 @@
 package org.xiaowu.behappy.redis.metadata;
  
 /**
- * @apiNote  限流类型
+ * 限流类型
  */
 public enum LimitTypeEnum {
     /**

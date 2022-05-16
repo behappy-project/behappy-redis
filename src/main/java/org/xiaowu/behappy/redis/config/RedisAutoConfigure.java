@@ -48,7 +48,6 @@ import java.util.Map;
  * redis 配置类
  * @author xiaowu
  */
-@Configuration
 @EnableCaching
 @AllArgsConstructor
 @AutoConfigureBefore(RedissonAutoConfiguration.class)
