@@ -67,11 +67,6 @@ behappy:
 # 参考org.redisson.spring.starter.RedissonAutoConfiguration
 spring:
   redis:
-    host: 192.168.56.103
-    timeout: 10000ms
-    port: 6379
-    database: 0
-    password:
     redisson:
       file: classpath:redisson.yaml
 ```
