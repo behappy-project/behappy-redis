@@ -2,10 +2,6 @@ package org.xiaowu.behappy.redis.config;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.xiaowu.behappy.redis.metadata.Constant;
 
 /**
@@ -29,9 +25,10 @@ public class BannerInitializer implements ApplicationContextInitializer<Configur
                     "|_____||_____||__|__||__|__||__|  |__|  |____/     |__|\\_||_____||_____||____|\\___|\n" +
                     "                                                                                   ";
             System.out.println(banner);
-            StringBuilder version = new StringBuilder().append("Version:").append("1.0.0");
-            StringBuilder github = new StringBuilder().append("Github:").append("https://github.com/wang-xiaowu");
-            StringBuilder blog = new StringBuilder().append("Version:").append("https://wang-xiaowu.github.io/");
+            String implementationVersion = this.getClass().getPackage().getImplementationVersion();
+            StringBuilder version = new StringBuilder().append("Version:").append(implementationVersion);
+            StringBuilder github = new StringBuilder().append("Blog:").append("https://wang-xiaowu.github.io");
+            StringBuilder blog = new StringBuilder().append("Github:").append("https://github.com/wang-xiaowu");
             System.out.println(version);
             System.out.println(github);
             System.out.println(blog);

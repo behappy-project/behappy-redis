@@ -1,5 +1,15 @@
 spring:
   redis:
-    password: xxx
-    host: xxx
-    port: 6666
+    redisson:
+      config: |
+        singleServerConfig:
+          password: xxx
+          address: "xxx:6666"
+          database: 1
+        threads: 0
+        nettyThreads: 0
+        codec: !<org.xiaowu.behappy.redis.serializer.FstCodec> {}
+        transportMode: "NIO"
+#    password: xxx
+#    host: xxx
+#    port: 6666

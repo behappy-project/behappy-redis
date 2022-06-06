@@ -100,8 +100,4 @@ public class IPUtils {
         }
         return ipInt[0] * 256 * 256 * 256 + + ipInt[1] * 256 * 256 + ipInt[2] * 256 + ipInt[3];
     }
-
-    public static void main(String[] args) {
-        System.out.println(getLocalIP());
-    }
 }

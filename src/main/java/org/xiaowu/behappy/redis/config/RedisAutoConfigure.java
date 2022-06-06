@@ -21,18 +21,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.util.CollectionUtils;
 import org.xiaowu.behappy.redis.repository.CacheManagerRepository;
@@ -40,7 +34,6 @@ import org.xiaowu.behappy.redis.repository.RedisRepository;
 import org.xiaowu.behappy.redis.serializer.FstCodec;
 import org.xiaowu.behappy.redis.serializer.FstRedisSerializer;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,13 +52,11 @@ public class RedisAutoConfigure {
     private final RedissonClient redisson;
 
     @Bean
-    @ConditionalOnMissingBean
     public CacheManagerRepository cacheManagerRepository(@Autowired CacheManager cacheManager) {
         return new CacheManagerRepository(cacheManager);
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public RedisRepository redisRepository(@Autowired RedisTemplate redisTemplate) {
         return new RedisRepository(redisTemplate);
     }
@@ -90,7 +81,6 @@ public class RedisAutoConfigure {
      * @param factory
      */
     @Bean
-    @ConditionalOnMissingBean
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory
             , RedisSerializer<String> redisKeySerializer, RedisSerializer<Object> redisValueSerializer) {
         StringRedisTemplate redisTemplate = new StringRedisTemplate();
@@ -108,7 +98,6 @@ public class RedisAutoConfigure {
      * @param factory
      */
     @Bean
-    @ConditionalOnMissingBean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory
             , RedisSerializer<String> redisKeySerializer, RedisSerializer<Object> redisValueSerializer) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
@@ -122,7 +111,6 @@ public class RedisAutoConfigure {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     @DependsOn("redisson")
     public CacheManager cacheManager(RedissonClient redisson) {
         //自定义的缓存过期时间配置

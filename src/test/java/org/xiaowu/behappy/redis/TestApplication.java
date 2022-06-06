@@ -4,15 +4,16 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RReadWriteLock;
+import org.redisson.api.RTopic;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,6 +29,15 @@ public class TestApplication {
 
     @Autowired
     WebApplicationContext webApplicationContext;
+
+    @Autowired
+    RedisTemplate<Object,Object> redisTemplate;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @Autowired
+    RedissonClient redisson;
 
     MockMvc mockMvc;
 
@@ -51,5 +61,14 @@ public class TestApplication {
         mockMvc.perform(MockMvcRequestBuilders.get("/lock")).
                 andExpect(MockMvcResultMatchers.status().isOk()).
                 andReturn();
+    }
+
+
+
+    @Test
+    void testRedis(){
+        //applicationContext.getBeanDefinitionNames();
+        //User user = new User("小米", 12);
+        //redisTemplate.opsForValue().set("test",user);
     }
 }

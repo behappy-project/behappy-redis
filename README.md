@@ -1,11 +1,15 @@
 ## BeHappy Redis
+
 * 集成redisson
 * 写了些redis常用轮子,避免重复造
 * 配置简单,使用方便
 
 ## 使用方式
+
 ### 配置
-- redisson.yaml配置, 详细请[参见redisson配置方式](https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95)
+
+- redisson.yaml配置, 详细请[参见redisson配置方式](https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95), [redisson-spring-boot-starter](https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter)
+
 ```
 # 单节点设置
 singleServerConfig:
@@ -42,16 +46,17 @@ threads: 0
 # 这个线程池数量是在一个Redisson实例内，被其创建的所有分布式数据类型和服务，以及底层客户端所一同共享的线程池里保存的线程数量。
 nettyThreads: 0
 # 序列化方式, 内部提供了`ruedigermoeller`的fst方式,配置如下即可
-# 不配置使用默认jackson方式
-codec:
-  class: org.xiaowu.behappy.redis.serializer.FstCodec
+# (默认为jackson方式)如果想要适用jdk的编码方式,可以如下配置,jdk编码方式model必须实现序列化接口
+codec: !<org.xiaowu.behappy.redis.serializer.FstCodec> {}
 transportMode: NIO
 ```
+
 - application.yaml
+
 ```
 behappy:
   redis:
-    # runner打印
+    # banner打印
     banner-shown: false
     # CacheManager缓存配置
     cache-manager:
@@ -70,7 +75,9 @@ spring:
     redisson:
       file: classpath:redisson.yaml
 ```
+
 ## 限流
+
 ```
 @RateLimit
 /**
@@ -107,6 +114,7 @@ RateType mode() default RateType.PER_CLIENT;
 ```
 
 ## 分布式锁
+
 ```
 @Lock(key = "#name")
 /**
@@ -134,7 +142,9 @@ boolean isFair() default false;
 ```
 
 ## 幂等
+
 ```
+@Idempotent
 /**
  * 幂等操作的唯一标识，使用spring el表达式 用#来引用方法参数
  */
