@@ -5,13 +5,21 @@
 * 配置简单,使用方便
 
 ## 使用方式
+### pom
+```
+<dependency>
+    <groupId>io.github.wang-xiaowu</groupId>
+    <artifactId>behappy-redis</artifactId>
+    <version>0.0.3</version>
+</dependency>
+```
 
 ### 配置
 
 - redisson.yaml配置, 详细请[参见redisson配置方式](https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95), [redisson-spring-boot-starter](https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter)
 
 ```
-# 单节点设置
+# 例: 单节点设置
 singleServerConfig:
   # （节点地址）redis://-非ssl,rediss://-ssl
   address: redis://127.0.0.1:6379
