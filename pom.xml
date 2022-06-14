@@ -34,9 +34,9 @@
     </developers>
     <scm>
         <tag>master</tag>
-        <connection>scm:git:git@github.com:wang-xiaowu/behappy-redis.git</connection>
-        <developerConnection>scm:git:ssh@github.com:wang-xiaowu/behappy-redis.git</developerConnection>
-        <url>https://github.com/wang-xiaowu/behappy-redis/tree/master</url>
+        <connection>scm:git:git@github.com:behappy-project/behappy-redis.git</connection>
+        <developerConnection>scm:git:ssh@github.com:behappy-project/behappy-redis.git</developerConnection>
+        <url>https://github.com/behappy-project/behappy-redis/tree/master</url>
     </scm>
 
 
