@@ -82,11 +82,11 @@ public class RateLimitAspect {
                 //移除配置，重新加载配置
                 rRateLimiter.delete();
                 // 最大流速 = 每${time}秒钟产生${count}个令牌
-                rRateLimiter.trySetRate(rateLimit.mode(), count, time, RateIntervalUnit.SECONDS);
+                rRateLimiter.trySetRate(mode, count, time, RateIntervalUnit.SECONDS);
             }
         }else {
             // 最大流速 = 每${time}秒钟产生${count}个令牌
-            rRateLimiter.trySetRate(rateLimit.mode(), count, time, RateIntervalUnit.SECONDS);
+            rRateLimiter.trySetRate(mode, count, time, RateIntervalUnit.SECONDS);
         }
         return rRateLimiter;
     }
