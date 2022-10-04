@@ -75,7 +75,7 @@ public class RateLimitAspect {
         RRateLimiter rRateLimiter = redissonClient.getRateLimiter(key);
         if (rRateLimiter.isExists()) {
             RateLimiterConfig rateLimiterConfig = rRateLimiter.getConfig();//读取已经存在配置
-            long rateInterval = rateLimiterConfig.getRateInterval()/1000;//限时时间
+            long rateInterval = rateLimiterConfig.getRateInterval();//限时时间
             long rate = rateLimiterConfig.getRate();//次数
             RateType rateType = rateLimiterConfig.getRateType();//类型
             if (time != rateInterval || rate != count || mode != rateType) {
