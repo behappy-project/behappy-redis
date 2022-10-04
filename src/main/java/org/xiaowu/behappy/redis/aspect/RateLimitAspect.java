@@ -6,10 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.redisson.api.RRateLimiter;
-import org.redisson.api.RateIntervalUnit;
-import org.redisson.api.RateLimiterConfig;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -74,17 +71,23 @@ public class RateLimitAspect {
         }
         long count = rateLimit.count();//限流次数
         long time = rateLimit.time();//限流时间
+        RateType mode = rateLimit.mode();//限流类型
         RRateLimiter rRateLimiter = redissonClient.getRateLimiter(key);
         if (rRateLimiter.isExists()) {
             RateLimiterConfig rateLimiterConfig = rRateLimiter.getConfig();//读取已经存在配置
             long rateInterval = rateLimiterConfig.getRateInterval()/1000;//限时时间
             long rate = rateLimiterConfig.getRate();//次数
-            if (time != rateInterval || rate != count) {
-                rRateLimiter.delete();//移除配置，重新加载配置
+            RateType rateType = rateLimiterConfig.getRateType();//类型
+            if (time != rateInterval || rate != count || mode != rateType) {
+                //移除配置，重新加载配置
+                rRateLimiter.delete();
+                // 最大流速 = 每${time}秒钟产生${count}个令牌
+                rRateLimiter.trySetRate(rateLimit.mode(), count, time, RateIntervalUnit.SECONDS);
             }
+        }else {
+            // 最大流速 = 每${time}秒钟产生${count}个令牌
+            rRateLimiter.trySetRate(rateLimit.mode(), count, time, RateIntervalUnit.SECONDS);
         }
-        // 最大流速 = 每${time}秒钟产生${count}个令牌
-        rRateLimiter.trySetRate(rateLimit.mode(), count, time, RateIntervalUnit.SECONDS);
         return rRateLimiter;
     }
 }
