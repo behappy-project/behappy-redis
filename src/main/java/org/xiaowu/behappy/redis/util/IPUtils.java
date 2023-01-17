@@ -1,6 +1,8 @@
 package org.xiaowu.behappy.redis.util;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -10,8 +12,13 @@ import java.util.regex.Pattern;
 
 /**
  * ip工具类
+ * @author 94391
  */
+@Slf4j
 public class IPUtils {
+
+    private IPUtils() {
+    }
 
     /**
      * 检查IP是否合法
@@ -38,11 +45,11 @@ public class IPUtils {
     public static String getLocalIP() {
         String localIP = "127.0.0.1";
         try {
-            Enumeration netInterfaces = NetworkInterface.getNetworkInterfaces();
+            Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();
             while (netInterfaces.hasMoreElements()) {
                 NetworkInterface ni = (NetworkInterface) netInterfaces.nextElement();
                 InetAddress ip = ni.getInetAddresses().nextElement();
-                if (!ip.isLoopbackAddress() && ip.getHostAddress().indexOf(":") == -1) {
+                if (!ip.isLoopbackAddress() && !ip.getHostAddress().contains(":")) {
                     localIP = ip.getHostAddress();
                     break;
                 }
@@ -64,24 +71,25 @@ public class IPUtils {
      */
     public static String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        String unknownStr = "unknown";
+        if (ip == null || ip.length() == 0 || unknownStr.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknownStr.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknownStr.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknownStr.equalsIgnoreCase(ip)) {
             ip = request.getHeader("http_client_ip");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknownStr.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
         // 如果是多级代理，那么取第一个ip为客户ip
-        if (ip != null && ip.indexOf(",") != -1) {
-            ip = ip.substring(ip.lastIndexOf(",") + 1, ip.length()).trim();
+        if (ip != null && ip.contains(",")) {
+            ip = ip.substring(ip.lastIndexOf(",") + 1).trim();
         }
         return ip;
     }
@@ -96,8 +104,8 @@ public class IPUtils {
         String[] intArr = ip.split("\\.");
         int[] ipInt = new int[intArr.length];
         for (int i = 0; i <intArr.length ; i++) {
-            ipInt[i] = new Integer(intArr[i]).intValue();
+            ipInt[i] = Integer.parseInt(intArr[i]);
         }
-        return ipInt[0] * 256 * 256 * 256 + + ipInt[1] * 256 * 256 + ipInt[2] * 256 + ipInt[3];
+        return (long) ipInt[0] * 256 * 256 * 256 + + ipInt[1] * 256 * 256 + ipInt[2] * 256L + ipInt[3];
     }
 }

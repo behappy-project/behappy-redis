@@ -3,6 +3,7 @@
 * 集成redisson
 * 写了些redis常用轮子,避免重复造
 * 配置简单,使用方便
+* 支持springboot3.0
 
 ## 使用方式
 ### pom
@@ -10,7 +11,7 @@
 <dependency>
     <groupId>io.github.wang-xiaowu</groupId>
     <artifactId>behappy-redis</artifactId>
-    <version>0.0.4</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -54,9 +55,10 @@ threads: 0
 # 这个线程池数量是在一个Redisson实例内，被其创建的所有分布式数据类型和服务，以及底层客户端所一同共享的线程池里保存的线程数量。
 nettyThreads: 0
 # 序列化方式, 内部提供了`ruedigermoeller`的fst方式,配置如下即可
-# (默认为jackson方式)如果想要适用jdk的编码方式,可以如下配置,jdk编码方式model必须实现序列化接口
-codec: !<org.xiaowu.behappy.redis.serializer.FstCodec> {}
-transportMode: NIO
+# (默认为KryoCodec方式)，当前支持jackson和KryoCodec序列化方式
+codec: 
+  class: org.redisson.codec.KryoCodec
+transportMode: "NIO"
 ```
 
 - application.yaml
@@ -64,6 +66,8 @@ transportMode: NIO
 ```
 behappy:
   redis:
+    # 如果使用KryoCodec序列化方式，需要注册对应bean，可以配置如下属性，程序启动时会扫描包下所有类进行自动注册
+    register-clazz-package: org.xiaowu.behappy.redis.register
     # banner打印
     banner-shown: false
     # CacheManager缓存配置

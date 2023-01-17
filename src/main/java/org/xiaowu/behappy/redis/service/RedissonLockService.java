@@ -77,10 +77,8 @@ public class RedissonLockService {
      * @param lock 锁对象
      */
     public void unlock(RLock lock) {
-        if (lock != null) {
-            if (lock.isLocked()) {
-                lock.unlock();
-            }
+        if (lock != null && lock.isLocked()) {
+            lock.unlock();
         }
     }
 }

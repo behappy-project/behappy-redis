@@ -1,13 +1,12 @@
 package org.xiaowu.behappy.redis.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
-@RequiredArgsConstructor
-public class CacheManagerRepository {
-
-    private final CacheManager cacheManager;
+/**
+ * @author 94391
+ */
+public record CacheManagerRepository(CacheManager cacheManager) {
 
     @SuppressWarnings({"unchecked"})
     public <T> T getCache(String cacheName,String key) {

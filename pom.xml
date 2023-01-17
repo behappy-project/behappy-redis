@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.4</version>
+        <version>3.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.github.wang-xiaowu</groupId>
     <artifactId>behappy-redis</artifactId>
-    <version>0.0.4</version>
+    <version>3.0.0</version>
     <name>behappy-redis</name>
     <description>redis工具整合包</description>
 
@@ -41,14 +41,13 @@
 
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <redisson.version>3.17.3</redisson.version>
+        <redisson.version>3.19.1</redisson.version>
         <banner.version>1.0.2</banner.version>
-        <jsr310.version>2.13.1</jsr310.version>
-        <ruedigermoeller.version>2.57</ruedigermoeller.version>
+        <jsr310.version>2.14.0</jsr310.version>
         <spring.checkstyle.plugin>0.0.28</spring.checkstyle.plugin>
     </properties>
     <dependencies>
@@ -72,8 +71,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -99,11 +98,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.ruedigermoeller</groupId>
-            <artifactId>fst</artifactId>
-            <version>${ruedigermoeller.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,5 +1,6 @@
 package org.xiaowu.behappy.redis.aspect;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -7,7 +8,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.*;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -16,7 +16,6 @@ import org.xiaowu.behappy.redis.exception.BeHappyException;
 import org.xiaowu.behappy.redis.metadata.LimitTypeEnum;
 import org.xiaowu.behappy.redis.util.IPUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -41,8 +40,10 @@ public class RateLimitAspect {
         String url = request.getRequestURI();
         ipBuffer.append(StringUtils.replace(url, "/", "_"));
         ipBuffer.append("_");
-        ipBuffer.append(IPUtils.getClientIp(request));//获取请求IP信息
-        RRateLimiter rRateLimiter = getRRateLimiter(joinPoint, ipBuffer.toString(),rateLimit);//获取配置RRateLimiter信息
+        //获取请求IP信息
+        ipBuffer.append(IPUtils.getClientIp(request));
+        //获取配置RRateLimiter信息
+        RRateLimiter rRateLimiter = getRRateLimiter(joinPoint, ipBuffer.toString(),rateLimit);
         boolean flag = rRateLimiter.tryAcquire();
         if (!flag){
             log.error("IP【{}】访问唯一标识【{}】超出频率限制，限制规则为[限流模式：{}; 限流数量：{}; 限流时间间隔：{};]",

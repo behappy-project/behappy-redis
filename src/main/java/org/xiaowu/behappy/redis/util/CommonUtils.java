@@ -1,19 +1,31 @@
 package org.xiaowu.behappy.redis.util;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.util.ClassUtils;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * 公共工具类
  * @author xiaowu
  */
+@Slf4j
 @UtilityClass
 public class CommonUtils {
 
@@ -21,6 +33,8 @@ public class CommonUtils {
      * 用于SpEL表达式解析.
      */
     private static final SpelExpressionParser SPEL_EXPRESSION_PARSER = new SpelExpressionParser();
+
+    private static final String RESOURCE_PATTERN = "/**/*.class";
 
     /**
      * 用于获取方法参数定义名字.
@@ -60,5 +74,32 @@ public class CommonUtils {
             return expression.getValue(context).toString();
         }
         return null;
+    }
+
+
+
+
+    public List<Class<?>> scanClazz(String basePackage) {
+        List<Class<?>> classes = new ArrayList<>();
+        // spring工具类，可以获取指定路径下的全部类
+        ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        try {
+            String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+                    ClassUtils.convertClassNameToResourcePath(basePackage) + RESOURCE_PATTERN;
+            Resource[] resources = resourcePatternResolver.getResources(pattern);
+            //MetadataReader 的工厂类
+            MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+            for (Resource resource : resources) {
+                //用于读取类信息
+                MetadataReader reader = readerFactory.getMetadataReader(resource);
+                //扫描到的class
+                String classname = reader.getClassMetadata().getClassName();
+                Class<?> clazz = Class.forName(classname);
+                classes.add(clazz);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("redis扫描注册类出现错误： {}",e.getMessage());
+        }
+        return classes;
     }
 }

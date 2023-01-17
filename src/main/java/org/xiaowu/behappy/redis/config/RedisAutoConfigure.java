@@ -31,8 +31,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.util.CollectionUtils;
 import org.xiaowu.behappy.redis.repository.CacheManagerRepository;
 import org.xiaowu.behappy.redis.repository.RedisRepository;
-import org.xiaowu.behappy.redis.serializer.FstCodec;
-import org.xiaowu.behappy.redis.serializer.FstRedisSerializer;
+import org.xiaowu.behappy.redis.serializer.KryoRedisSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,11 +68,10 @@ public class RedisAutoConfigure {
     @Bean
     @DependsOn("redisson")
     public RedisSerializer<Object> redisValueSerializer() {
-        if (redisson.getConfig().getCodec() instanceof FstCodec) {
-            return new FstRedisSerializer();
+        if (redisson.getConfig().getCodec() instanceof org.redisson.codec.KryoCodec) {
+            return new KryoRedisSerializer<Object>(beHappyRedisProperties.getRegisterClazzPackage());
         }
-        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer(getObjectMapper());
-        return genericJackson2JsonRedisSerializer;
+        return new GenericJackson2JsonRedisSerializer(getObjectMapper());
     }
 
     /**
@@ -86,9 +84,10 @@ public class RedisAutoConfigure {
         StringRedisTemplate redisTemplate = new StringRedisTemplate();
         redisTemplate.setConnectionFactory(factory);
 
-        redisTemplate.setDefaultSerializer(redisValueSerializer);
         redisTemplate.setKeySerializer(redisKeySerializer);
         redisTemplate.setHashKeySerializer(redisKeySerializer);
+        redisTemplate.setValueSerializer(redisValueSerializer);
+        redisTemplate.setHashValueSerializer(redisValueSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
@@ -103,9 +102,10 @@ public class RedisAutoConfigure {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
 
-        redisTemplate.setDefaultSerializer(redisValueSerializer);
         redisTemplate.setKeySerializer(redisKeySerializer);
         redisTemplate.setHashKeySerializer(redisKeySerializer);
+        redisTemplate.setValueSerializer(redisValueSerializer);
+        redisTemplate.setHashValueSerializer(redisValueSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
@@ -136,7 +136,7 @@ public class RedisAutoConfigure {
         return (target, method, objects) -> {
             StringBuilder sb = new StringBuilder();
             sb.append(target.getClass().getName());
-            sb.append(":" + method.getName() + ":");
+            sb.append(":").append(method.getName()).append(":");
             for (Object obj : objects) {
                 sb.append(obj.toString());
             }

@@ -1,6 +1,5 @@
 package org.xiaowu.behappy.redis.repository;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisClusterNode;
@@ -18,13 +17,10 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Redis Repository
+ * @author xiaowu
  */
 @Slf4j
-@RequiredArgsConstructor
-public class RedisRepository {
-
-    private final RedisTemplate<String, Object> redisTemplate;
+public record RedisRepository(RedisTemplate<String, Object> redisTemplate) {
 
     /**
      * 获取链接工厂
@@ -36,7 +32,8 @@ public class RedisRepository {
     /**
      * 获取 RedisTemplate对象
      */
-    public RedisTemplate<String, Object> getRedisTemplate() {
+    @Override
+    public RedisTemplate<String, Object> redisTemplate() {
         return redisTemplate;
     }
 
@@ -74,9 +71,11 @@ public class RedisRepository {
     public void setExpire(final String key, final Object value, final long time, final TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, time, timeUnit);
     }
+
     public void setExpire(final String key, final Object value, final long time) {
         this.setExpire(key, value, time, TimeUnit.SECONDS);
     }
+
     public void setExpire(final String key, final Object value, final long time, final TimeUnit timeUnit, RedisSerializer<Object> valueSerializer) {
         byte[] rawKey = rawKey(key);
         byte[] rawValue = rawValue(value, valueSerializer);
@@ -87,11 +86,13 @@ public class RedisRepository {
                 potentiallyUsePsetEx(connection);
                 return null;
             }
+
             public void potentiallyUsePsetEx(RedisConnection connection) {
                 if (!TimeUnit.MILLISECONDS.equals(timeUnit) || !failsafeInvokePsetEx(connection)) {
                     connection.setEx(rawKey, TimeoutUtils.toSeconds(time, timeUnit), rawValue);
                 }
             }
+
             private boolean failsafeInvokePsetEx(RedisConnection connection) {
                 boolean failed = false;
                 try {
@@ -170,6 +171,7 @@ public class RedisRepository {
     public Object get(final String key) {
         return redisTemplate.opsForValue().get(key);
     }
+
     /**
      * 根据key获取对象
      *
@@ -438,9 +440,10 @@ public class RedisRepository {
         if (key instanceof byte[]) {
             return (byte[]) key;
         }
-        RedisSerializer<Object> redisSerializer = (RedisSerializer<Object>)redisTemplate.getKeySerializer();
+        RedisSerializer<Object> redisSerializer = (RedisSerializer<Object>) redisTemplate.getKeySerializer();
         return redisSerializer.serialize(key);
     }
+
     private byte[] rawValue(Object value, RedisSerializer valueSerializer) {
         if (value instanceof byte[]) {
             return (byte[]) value;

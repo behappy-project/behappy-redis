@@ -13,7 +13,7 @@ public class BannerInitializer implements ApplicationContextInitializer<Configur
     public void initialize(ConfigurableApplicationContext applicationContext) {
         if (applicationContext.getParent() == null && applicationContext.getParent() != applicationContext) {
             String bannerShown = System.getProperty(Constant.BANNER_SHOWN, "true");
-            if (!Boolean.valueOf(bannerShown)) {
+            if (!Boolean.parseBoolean(bannerShown)) {
                 return;
             }
             String banner = " ____     ___  __ __   ____  ____  ____  __ __      ____     ___  ___    ____ _____\n" +
@@ -26,12 +26,9 @@ public class BannerInitializer implements ApplicationContextInitializer<Configur
                     "                                                                                   ";
             System.out.println(banner);
             String implementationVersion = this.getClass().getPackage().getImplementationVersion();
-            StringBuilder version = new StringBuilder().append("Version:").append(implementationVersion);
-            StringBuilder github = new StringBuilder().append("Blog:").append("https://wang-xiaowu.github.io");
-            StringBuilder blog = new StringBuilder().append("Github:").append("https://github.com/wang-xiaowu");
-            System.out.println(version);
-            System.out.println(github);
-            System.out.println(blog);
+            System.out.println("Version:" + implementationVersion);
+            System.out.println("Blog:" + "https://wang-xiaowu.github.io");
+            System.out.println("Github:" + "https://github.com/wang-xiaowu");
         }
     }
 

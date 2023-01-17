@@ -1,5 +1,6 @@
 package org.xiaowu.behappy.redis.aspect;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -18,7 +19,6 @@ import org.xiaowu.behappy.redis.annotation.Idempotent;
 import org.xiaowu.behappy.redis.exception.BeHappyException;
 import org.xiaowu.behappy.redis.util.CommonUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Arrays;

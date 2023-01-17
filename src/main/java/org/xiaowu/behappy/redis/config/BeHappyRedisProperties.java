@@ -1,12 +1,9 @@
 package org.xiaowu.behappy.redis.config;
 
 import lombok.Data;
-import org.redisson.config.TransportMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.xiaowu.behappy.redis.metadata.Constant;
-import org.xiaowu.behappy.redis.metadata.DurationEnum;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +13,8 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "behappy.redis")
 public class BeHappyRedisProperties {
+
+    private String registerClazzPackage;
 
     /**
      * @see CacheManager

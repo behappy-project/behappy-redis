@@ -1,4 +1,4 @@
-package org.xiaowu.behappy.redis;
+package org.xiaowu.behappy.redis.register;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 445734847601688658L;
+    private static final long serialVersionUID = 1L;
     private String name;
 
     private Integer age;
