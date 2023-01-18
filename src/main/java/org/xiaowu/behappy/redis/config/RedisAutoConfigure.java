@@ -68,8 +68,8 @@ public class RedisAutoConfigure {
     @Bean
     @DependsOn("redisson")
     public RedisSerializer<Object> redisValueSerializer() {
-        if (redisson.getConfig().getCodec() instanceof org.redisson.codec.KryoCodec) {
-            return new KryoRedisSerializer<Object>(beHappyRedisProperties.getRegisterClazzPackage());
+        if (redisson.getConfig().getCodec() instanceof org.redisson.codec.Kryo5Codec) {
+            return new KryoRedisSerializer<>(beHappyRedisProperties.getRegisterClazzPackages());
         }
         return new GenericJackson2JsonRedisSerializer(getObjectMapper());
     }

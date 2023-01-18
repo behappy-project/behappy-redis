@@ -15,11 +15,10 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.ClassUtils;
+import org.xiaowu.behappy.redis.annotation.KryoSerialize;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 公共工具类
@@ -76,26 +75,29 @@ public class CommonUtils {
         return null;
     }
 
-
-
-
-    public List<Class<?>> scanClazz(String basePackage) {
+    public List<Class<?>> scanClazz(List<String> basePackages) {
         List<Class<?>> classes = new ArrayList<>();
         // spring工具类，可以获取指定路径下的全部类
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         try {
-            String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    ClassUtils.convertClassNameToResourcePath(basePackage) + RESOURCE_PATTERN;
-            Resource[] resources = resourcePatternResolver.getResources(pattern);
-            //MetadataReader 的工厂类
-            MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
-            for (Resource resource : resources) {
-                //用于读取类信息
-                MetadataReader reader = readerFactory.getMetadataReader(resource);
-                //扫描到的class
-                String classname = reader.getClassMetadata().getClassName();
-                Class<?> clazz = Class.forName(classname);
-                classes.add(clazz);
+            for (String basePackage : basePackages) {
+                String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+                        ClassUtils.convertClassNameToResourcePath(basePackage) + RESOURCE_PATTERN;
+                Resource[] resources = resourcePatternResolver.getResources(pattern);
+                //MetadataReader 的工厂类
+                MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+                for (Resource resource : resources) {
+                    //用于读取类信息
+                    MetadataReader reader = readerFactory.getMetadataReader(resource);
+                    //扫描到的class
+                    String classname = reader.getClassMetadata().getClassName();
+                    Class<?> clazz = Class.forName(classname);
+                    // 判断是否有指定主解
+                    KryoSerialize anno = clazz.getAnnotation(KryoSerialize.class);
+                    if (anno != null) {
+                        classes.add(clazz);
+                    }
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             log.error("redis扫描注册类出现错误： {}",e.getMessage());

@@ -25,8 +25,9 @@ spring:
         threads: 0
         nettyThreads: 0
         codec: 
-          class: org.redisson.codec.KryoCodec
+          class: org.redisson.codec.JsonJacksonCodec
         transportMode: "NIO"
 behappy:
   redis:
-    register-clazz-package: org.xiaowu.behappy.redis.register
+    register-clazz-packages:
+      - org.xiaowu.behappy.redis

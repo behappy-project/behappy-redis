@@ -54,10 +54,9 @@ singleServerConfig:
 threads: 0
 # 这个线程池数量是在一个Redisson实例内，被其创建的所有分布式数据类型和服务，以及底层客户端所一同共享的线程池里保存的线程数量。
 nettyThreads: 0
-# 序列化方式, 内部提供了`ruedigermoeller`的fst方式,配置如下即可
-# (默认为KryoCodec方式)，当前支持jackson和KryoCodec序列化方式
+# (如果不配置则默认为Kryo5Codec方式)，当前支持JsonJacksonCodec和Kryo5Codec序列化方式
 codec: 
-  class: org.redisson.codec.KryoCodec
+  class: org.redisson.codec.JsonJacksonCodec
 transportMode: "NIO"
 ```
 
@@ -66,8 +65,9 @@ transportMode: "NIO"
 ```
 behappy:
   redis:
-    # 如果使用KryoCodec序列化方式，需要注册对应bean，可以配置如下属性，程序启动时会扫描包下所有类进行自动注册
-    register-clazz-package: org.xiaowu.behappy.redis.register
+    # 如果使用Kryo5Codec序列化方式，需要注册对应bean；配置如下属性，程序启动时会扫描对应包下包含@KryoSerialize的类进行注册
+    register-clazz-packages: 
+      - xxx.xxx.xxx
     # banner打印
     banner-shown: false
     # CacheManager缓存配置

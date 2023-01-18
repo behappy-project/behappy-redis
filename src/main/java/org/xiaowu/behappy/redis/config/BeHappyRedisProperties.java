@@ -14,7 +14,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "behappy.redis")
 public class BeHappyRedisProperties {
 
-    private String registerClazzPackage;
+    private List<String> registerClazzPackages;
 
     /**
      * @see CacheManager

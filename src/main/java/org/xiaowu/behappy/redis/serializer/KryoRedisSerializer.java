@@ -30,11 +30,11 @@ import java.util.List;
 public class KryoRedisSerializer<T> implements RedisSerializer<T> {
 
     private final KryoCodec kryoPool;
-    private final String basePackage;
+    private final List<String> basePackages;
 
-    public KryoRedisSerializer(String basePackage) {
+    public KryoRedisSerializer(List<String> basePackages) {
         kryoPool = new KryoCodec(Collections.emptyList(), null);
-        this.basePackage = basePackage;
+        this.basePackages = basePackages;
     }
 
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
@@ -79,7 +79,7 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
     }
 
     private void registerClazz(Kryo kryo) {
-        List<Class<?>> classes = CommonUtils.scanClazz(basePackage);
+        List<Class<?>> classes = CommonUtils.scanClazz(basePackages);
         for (Class<?> clazz : classes) {
             kryo.register(clazz);
         }
