@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'xiaowu'
+          distribution: 'temurin'
           cache: maven
       # 配置 settings.xml 一般用于 Mavne 私库验证等
       #      - name: maven-settings-xml-action
