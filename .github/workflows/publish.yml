@@ -23,10 +23,6 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: maven
-          server-id: sonatype-nexus-staging
-          server-username: ${{ secrets.OSSRH_USER }}
-          server-password: ${{ secrets.OSSRH_PASSWORD }}
-          gpg-passphrase: ${{ secrets.GPG_PASSWORD }}
       # 3. 发布到Maven中央仓库
       - name: Publish to Maven Central Repo
         # 这里用到了其他人写的action脚本，详细可以去看他的文档。
@@ -36,3 +32,5 @@ jobs:
           gpg_passphrase: ${{ secrets.GPG_PASSWORD }}
           nexus_username: ${{ secrets.OSSRH_USER }}
           nexus_password: ${{ secrets.OSSRH_PASSWORD }}
+          server_id: ossrh
+          maven_goals_phases: clean deploy -DskipTests -Prelease
