@@ -118,7 +118,7 @@ public class RedisAutoConfigure {
         if (!CollectionUtils.isEmpty(beHappyRedisProperties.getCacheManager().getConfigs())) {
             beHappyRedisProperties.getCacheManager().getConfigs().forEach(e -> {
                 String cacheName = beHappyRedisProperties.getCacheManager().getPrefix().concat(":").concat(e.getKey()).concat(":");
-                CacheConfig cacheConfig = new CacheConfig(e.getTtl() * 60 * 1000, e.getMaxIdleTime() * 60 * 1000);
+                CacheConfig cacheConfig = new CacheConfig(e.getTtl() * 1000, e.getMaxIdleTime() * 1000);
                 cacheConfig.setMaxSize(e.getMaxSize());
                 redisCacheConfigurationMap.put(cacheName, cacheConfig);
             });

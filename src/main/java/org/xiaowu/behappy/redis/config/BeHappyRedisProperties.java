@@ -45,14 +45,14 @@ public class BeHappyRedisProperties {
         private String key;
 
         /**
-         * 单位毫秒
+         * 单位秒
          * 过期时间
          * 默认永久保存
          */
         private long ttl = 0;
 
         /**
-         * 单位毫秒
+         * 单位秒
          * 最长空闲时间
          * 默认永久保存
          */
