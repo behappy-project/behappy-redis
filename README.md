@@ -11,7 +11,7 @@
 <dependency>
     <groupId>io.github.wang-xiaowu</groupId>
     <artifactId>behappy-redis</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.3</version>
 </dependency>
 ```
 
@@ -75,12 +75,10 @@ behappy:
       # 缓存cache 前缀
       prefix: BEHAPPY
       configs:
+          # cacheName
         - key: test
           # 过期时间
           ttl: 0
-          # 最长空闲时间
-          maxIdleTime: 0
-          maxSize: 0
 # 参考org.redisson.spring.starter.RedissonAutoConfiguration
 spring:
   redis:
