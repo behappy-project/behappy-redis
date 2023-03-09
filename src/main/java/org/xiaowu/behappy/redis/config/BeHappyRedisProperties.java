@@ -50,18 +50,5 @@ public class BeHappyRedisProperties {
          * 默认永久保存
          */
         private long ttl = 0;
-
-        /**
-         * 单位秒
-         * 最长空闲时间
-         * 默认永久保存
-         */
-        private long maxIdleTime = 0;
-
-
-        /**
-         * maxSize
-         */
-        private int maxSize = 0;
     }
 }

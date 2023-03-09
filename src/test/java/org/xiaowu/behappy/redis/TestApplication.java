@@ -16,6 +16,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.xiaowu.behappy.redis.register.User;
+import org.xiaowu.behappy.redis.service.TestService;
+
+import java.util.List;
 
 /**
  * TestApplication
@@ -36,6 +39,9 @@ public class TestApplication {
 
     @Autowired
     RedissonClient redisson;
+
+    @Autowired
+    TestService testService;
 
     MockMvc mockMvc;
 
@@ -67,6 +73,10 @@ public class TestApplication {
         User user = new User("小米", 12);
         redisTemplate.opsForValue().set("test", user);
         System.out.println(redisTemplate.opsForValue().get("test"));
+
+        System.out.println(testService.findUsers(2L));
+
+        System.out.println(testService.findUser(1L));
     }
 
 

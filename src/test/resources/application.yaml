@@ -29,5 +29,7 @@ spring:
         transportMode: "NIO"
 behappy:
   redis:
-    register-clazz-packages:
-      - org.xiaowu.behappy.redis
+    cache-manager:
+      configs:
+        - key: DICT_CACHE
+          ttl: 3600
