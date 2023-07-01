@@ -1,5 +1,14 @@
 package org.xiaowu.behappy.redis.util;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -103,5 +112,21 @@ public class CommonUtils {
             log.error("redis扫描注册类出现错误： {}",e.getMessage());
         }
         return classes;
+    }
+
+    public ObjectMapper getObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // 日期序列化设置
+        objectMapper.registerModule(new JavaTimeModule());
+        // 简单类型序列化配置
+        objectMapper.registerModule((new SimpleModule()));
+        //禁用注解支持，防止一些@ignore的字段被忽略
+        objectMapper.configure(MapperFeature.USE_ANNOTATIONS, false);
+        //指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会抛出异常(如果不标注此属性，解析将是一个LinkHashMap类型的key-value的数据结构)
+        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        return objectMapper;
     }
 }

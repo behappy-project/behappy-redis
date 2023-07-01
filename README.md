@@ -3,7 +3,7 @@
 * 集成redisson
 * 写了些redis常用轮子,避免重复造
 * 配置简单,使用方便
-* 支持springboot3.0
+* 支持springboot3.x
 
 ## 使用方式
 ### pom
@@ -11,7 +11,7 @@
 <dependency>
     <groupId>io.github.wang-xiaowu</groupId>
     <artifactId>behappy-redis</artifactId>
-    <version>3.0.3</version>
+    <version>3.1.0</version>
 </dependency>
 ```
 
@@ -79,6 +79,11 @@ behappy:
         - key: test
           # 过期时间
           ttl: 0
+    # 配置http session（默认关闭）
+    session-enable: true
+    session-config:
+      cookie-max-age: 1
+      cookie-name: GULIMALL
 # 参考org.redisson.spring.starter.RedissonAutoConfiguration
 spring:
   redis:

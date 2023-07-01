@@ -14,6 +14,11 @@ import java.util.List;
 @ConfigurationProperties(prefix = "behappy.redis")
 public class BeHappyRedisProperties {
 
+    /**
+     * 是否启用redis http session
+     */
+    private Boolean sessionEnable = Boolean.FALSE;
+
     private List<String> registerClazzPackages;
 
     /**
