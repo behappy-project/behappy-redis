@@ -33,3 +33,7 @@ behappy:
       configs:
         - key: DICT_CACHE
           ttl: 3600
+    session-enable: true
+    session-config:
+      cookie-max-age: 1
+      cookie-name: GULIMALL
