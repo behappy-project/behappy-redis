@@ -14,7 +14,7 @@
 <dependency>
     <groupId>io.github.wang-xiaowu</groupId>
     <artifactId>behappy-redis</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.2</version>
 </dependency>
 ```
 
